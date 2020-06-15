@@ -23,7 +23,7 @@ typedef struct {
 
 int main() {
 
-   ALLEGRO_DISPLAY *display = NULL;		// Setup graphics window
+	ALLEGRO_DISPLAY *display = NULL;		// Setup graphics window
 	ALLEGRO_EVENT_QUEUE *evqueue;			// Setup events queue
 	ALLEGRO_TIMER *timer;
 
@@ -61,7 +61,6 @@ int main() {
 		planets[i].distFromSun = 149597870.7 * planets[i].distFromSun;
 	}
 	//864,938 miles (1.392 million km).
-	//trivial change to test git please ignore
 
 	ALLEGRO_EVENT event;
 
