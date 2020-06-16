@@ -28,9 +28,9 @@ int main() {
 	ALLEGRO_TIMER *timer;
 
 	// Initialise Allegro
-   al_init();
-   display = al_create_display(SCREEN_WIDTH, SCREEN_HEIGHT);
-   al_init_primitives_addon();
+	al_init();
+	display = al_create_display(SCREEN_WIDTH, SCREEN_HEIGHT);
+	al_init_primitives_addon();
 	evqueue = al_create_event_queue();
 	timer = al_create_timer(1.0 / 60.0);
 
@@ -40,19 +40,20 @@ int main() {
 	al_register_event_source(evqueue, al_get_timer_event_source(timer));
 
 	// Some vars
-	int i, j;					// general for loops and such
+	int i;						// general for loops and such
 	float zoom = 0.000001;
 
 	// Planet table init
-	planet planets[9] = {{"Mercury",    87.970, 0.0, 0.0, 0.387,   4879, (5,10)},
-			  					{"Venus"  ,   224.700, 0.0, 0.0, 0.722,  12104, (20,10)},
-			  					{"Earth"  ,   365.256, 0.0, 0.0, 1.000,  12742, (10, 15)},
-								{"Mars"   ,   686.980, 0.0, 0.0, 1.520,   6779, (20,20)},
-			  					{"Jupiter",  4332.590, 0.0, 0.0, 5.200, 139820, (20,10)},
-			  					{"Saturn" , 10759.220, 0.0, 0.0, 9.580, 116460, (10,10)},
-								{"Uranus" , 30685.400, 0.0, 0.0,19.200,  50724, (20,20)},
-								{"Neptune", 60189.000, 0.0, 0.0,30.100,  49224, (10, 15)},
-								{"Pluto"  , 90465.000, 0.0, 0.0,39.500,   2376, (20,20)}};
+	planet planets[9] = {
+		{"Mercury",    87.970, 0.0, 0.0, 0.387,   4879, (5,10)},
+		{"Venus"  ,   224.700, 0.0, 0.0, 0.722,  12104, (20,10)},
+		{"Earth"  ,   365.256, 0.0, 0.0, 1.000,  12742, (10, 15)},
+		{"Mars"   ,   686.980, 0.0, 0.0, 1.520,   6779, (20,20)},
+		{"Jupiter",  4332.590, 0.0, 0.0, 5.200, 139820, (20,10)},
+		{"Saturn" , 10759.220, 0.0, 0.0, 9.580, 116460, (10,10)},
+		{"Uranus" , 30685.400, 0.0, 0.0,19.200,  50724, (20,20)},
+		{"Neptune", 60189.000, 0.0, 0.0,30.100,  49224, (10, 15)},
+		{"Pluto"  , 90465.000, 0.0, 0.0,39.500,   2376, (20,20)}};
 
 	/* populate planets with degree steps required per earth day */
 	for (i=0; i<9; i++){
@@ -72,31 +73,29 @@ int main() {
 			running = false;
 		}
 		else if (event.type == ALLEGRO_EVENT_KEY_DOWN) {
-			if(event.keyboard.keycode == ALLEGRO_KEY_UP)
-            {
-					zoom += 0.0000001;
-	         }
-			else if(event.keyboard.keycode == ALLEGRO_KEY_DOWN)
-            {
-					zoom -= 0.0000001;
-	         }
+			if(event.keyboard.keycode == ALLEGRO_KEY_UP) {
+				zoom += 0.0000001;
+			}
+			else if(event.keyboard.keycode == ALLEGRO_KEY_DOWN) {
+				zoom -= 0.0000001;
+			}
 		}
 
 		// Draw sun out of loop (I draw this twice to save extra calc, first as a 1 pixel version)
 		al_draw_filled_circle( SCREEN_WIDTH/2 , SCREEN_HEIGHT/2, 2, al_map_rgb(255, 255, 0));
 		al_draw_filled_circle( SCREEN_WIDTH/2 , SCREEN_HEIGHT/2, 1392700 * zoom, al_map_rgb(255, 255, 0));
-		for(j=0; j<9; j++){
-			planets[j].currentAngle += planets[j].stepSize;
-				if (planets[j].currentAngle > 360) {
-				planets[j].currentAngle -= 360;
+		for(i=0; i<9; i++){
+			planets[i].currentAngle += planets[i].stepSize;
+				if (planets[i].currentAngle > 360) {
+				planets[i].currentAngle -= 360;
 			}
 			// x = r cos(t)   radius r , angle t
-			planets[j].centre.x = (zoom * planets[j].distFromSun) * cos(planets[j].currentAngle);	
+			planets[i].centre.x = (zoom * planets[i].distFromSun) * cos(planets[i].currentAngle);	
 			// y = r cos(t)	radius r , angle t
-			planets[j].centre.y = (zoom * planets[j].distFromSun) * sin(planets[j].currentAngle);	
-			al_draw_filled_circle(planets[j].centre.x, planets[j].centre.y, planets[j].dia * zoom, al_map_rgb(0, 255, 0));
-			if (planets[j].dia*zoom < 1) {
-				al_draw_filled_circle(planets[j].centre.x + SCREEN_WIDTH/2, planets[j].centre.y + SCREEN_HEIGHT/2, 2, al_map_rgb(0, 255, 0));
+			planets[i].centre.y = (zoom * planets[i].distFromSun) * sin(planets[i].currentAngle);	
+			al_draw_filled_circle(planets[i].centre.x, planets[i].centre.y, planets[i].dia * zoom, al_map_rgb(0, 255, 0));
+			if (planets[i].dia*zoom < 1) {
+				al_draw_filled_circle(planets[i].centre.x + SCREEN_WIDTH/2, planets[i].centre.y + SCREEN_HEIGHT/2, 2, al_map_rgb(0, 255, 0));
 			}
 		}
 		al_flip_display();
